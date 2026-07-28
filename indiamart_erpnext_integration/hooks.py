@@ -196,7 +196,7 @@ user_data_fields = [
 # translated_search_doctypes = []
 fixtures = [
       {
-        "dt": "Custom Field", 
-        "filters": [["name", "in", ["Lead-indiamart_section","Lead-query_id_cf"	]]]
+        "dt": "Custom Field",
+        "filters": [["name", "in", ["Lead-indiamart_section","Lead-query_id_cf","CRM Lead-query_id_cf"	]]]
       }
 ]

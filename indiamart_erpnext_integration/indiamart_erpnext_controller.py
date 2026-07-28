@@ -290,6 +290,95 @@ def make_erpnext_lead_from_inidamart(lead_values,indiamart_lead_name=None):
 		error = "\n".join([format_datetime(now_datetime(),'d-MMM-y  HH:mm:ss'), "make_erpnext_lead_from_inidamart","indiamart_lead_name  "+indiamart_lead_name,str(sys.exc_info()[1]), seperator,frappe.get_traceback()])
 		frappe.log_error(message=error, title=title)
 
+def add_frappe_crm_note(crm_lead_name, content):
+	note = frappe.new_doc('FCRM Note')
+	note.update({
+		"title": "Indiamart Enquiry",
+		"content": content,
+		"reference_doctype": "CRM Lead",
+		"reference_docname": crm_lead_name
+	})
+	note.insert(ignore_permissions=True)
+	return note.name
+
+
+def make_frappe_crm_lead_from_indiamart(lead_values, indiamart_lead_name=None):
+	try:
+		output = None
+		user = frappe.db.get_single_value('Indiamart Settings', 'default_lead_owner')
+		email_id = lead_values.get('SENDER_EMAIL', None)
+		mobile_no = lead_values.get('SENDER_MOBILE', None)
+
+		notes_html = "<div>Product Name :{0}</div><div>Subject :{1}</div><div>Message :{2}</div><div>Lead Date :{3}</div><div>Alternate EmailID :{4}</div><div>Alternate Mobile :{5}</div><div>India Mart Query ID :{6}</div>" \
+			.format(
+				frappe.bold(lead_values.get('QUERY_PRODUCT_NAME', 'Not specified')),
+				frappe.bold(lead_values.get('SUBJECT', 'Not specified')),
+				frappe.bold(lead_values.get('QUERY_MESSAGE', 'Not specified')),
+				frappe.bold(lead_values.get('QUERY_TIME', 'Not specified')),
+				frappe.bold(lead_values.get('EMAIL_ALT', 'Not specified')),
+				frappe.bold(lead_values.get('MOBILE_ALT', 'Not specified')),
+				frappe.bold(lead_values.get('UNIQUE_QUERY_ID', 'Not specified'))
+			)
+
+		crm_lead_name = frappe.db.get_value("CRM Lead", {"query_id_cf": lead_values.get('UNIQUE_QUERY_ID')})
+
+		if not crm_lead_name and mobile_no:
+			crm_lead_name = frappe.db.get_value("CRM Lead", {"mobile_no": mobile_no})
+
+		if not crm_lead_name and email_id:
+			crm_lead_name = frappe.db.get_value("CRM Lead", {"email": email_id})
+
+		if crm_lead_name:
+			add_frappe_crm_note(crm_lead_name, notes_html)
+			output = 'Note added to existing CRM Lead {0}.'.format(crm_lead_name)
+			if indiamart_lead_name:
+				frappe.db.set_value('Indiamart Lead', indiamart_lead_name, 'output', output)
+				frappe.db.set_value('Indiamart Lead', indiamart_lead_name, 'status', 'Completed')
+			return output
+
+		if lead_values.get('QUERY_TYPE') == 'W':
+			source = frappe.db.get_single_value('Indiamart Settings', 'crm_direct_lead_source')
+		elif lead_values.get('QUERY_TYPE') == 'B':
+			source = frappe.db.get_single_value('Indiamart Settings', 'crm_buy_lead_source')
+		elif lead_values.get('QUERY_TYPE') == 'P':
+			source = frappe.db.get_single_value('Indiamart Settings', 'crm_call_lead_source')
+		else:
+			source = None
+
+		crm_lead = frappe.new_doc('CRM Lead')
+		crm_lead.update({
+			"first_name": lead_values.get('SENDER_NAME'),
+			"email": email_id,
+			"mobile_no": mobile_no,
+			"organization": lead_values.get('SENDER_COMPANY'),
+			"source": source or '',
+			"lead_owner": user,
+			"query_id_cf": lead_values.get('UNIQUE_QUERY_ID')
+		})
+		crm_lead.flags.ignore_mandatory = True
+		crm_lead.flags.ignore_permissions = True
+		crm_lead.insert()
+
+		add_frappe_crm_note(crm_lead.name, notes_html)
+
+		output = 'CRM Lead {0} is created.'.format(crm_lead.name)
+		if indiamart_lead_name:
+			frappe.db.set_value('Indiamart Lead', indiamart_lead_name, 'output', output)
+			frappe.db.set_value('Indiamart Lead', indiamart_lead_name, 'status', 'Completed')
+		return output
+	except Exception as e:
+		title = _('Indiamart Error')
+		seperator = "--" * 50
+		error = "\n".join([
+			format_datetime(now_datetime(), 'd-MMM-y  HH:mm:ss'),
+			"make_frappe_crm_lead_from_indiamart",
+			"indiamart_lead_name  " + (indiamart_lead_name or ''),
+			str(sys.exc_info()[1]),
+			seperator,
+			frappe.get_traceback()
+		])
+		frappe.log_error(message=error, title=title)
+
 def update_existing_lead(lead_name,lead_values):
 		existing_lead_output=None
 		lead_status = frappe.db.get_value('Lead', lead_name, 'status')
