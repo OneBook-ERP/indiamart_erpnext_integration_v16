@@ -144,8 +144,12 @@ class TestFrappeCrmLeadDedup(IntegrationTestCase):
 			make_frappe_crm_lead_from_indiamart,
 		)
 
-		make_frappe_crm_lead_from_indiamart(self.sample_lead_values())
-		make_frappe_crm_lead_from_indiamart(self.sample_lead_values())
+		values = self.sample_lead_values(
+			SENDER_MOBILE="+91-9000000098",
+			SENDER_EMAIL="samequeryid@example.com",
+		)
+		make_frappe_crm_lead_from_indiamart(values)
+		make_frappe_crm_lead_from_indiamart(values)
 
 		count = frappe.db.count("CRM Lead", {"query_id_cf": "TEST-QID-DEDUP-0001"})
 		self.assertEqual(count, 1)
