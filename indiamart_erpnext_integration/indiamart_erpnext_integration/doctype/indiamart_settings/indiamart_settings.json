@@ -76,7 +76,7 @@
    "fieldname": "direct_lead_source",
    "fieldtype": "Link",
    "label": "Direct Lead Source",
-   "options": "Lead Source",
+   "options": "UTM Source",
    "reqd": 1
   },
   {
@@ -84,7 +84,7 @@
    "fieldname": "buy_lead_source",
    "fieldtype": "Link",
    "label": "Buy Lead Source",
-   "options": "Lead Source",
+   "options": "UTM Source",
    "reqd": 1
   },
   {
@@ -92,7 +92,7 @@
    "fieldname": "call_lead_source",
    "fieldtype": "Link",
    "label": "CALL Lead Source",
-   "options": "Lead Source",
+   "options": "UTM Source",
    "reqd": 1
   },
   {

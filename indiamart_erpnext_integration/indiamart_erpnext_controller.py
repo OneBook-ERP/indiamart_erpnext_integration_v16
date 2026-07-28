@@ -251,7 +251,7 @@ def make_erpnext_lead_from_inidamart(lead_values,indiamart_lead_name=None):
 							"lead_name": lead_values.get('SENDER_NAME'),
 							"email_id":email_id,
 							"mobile_no": mobile_no,
-							"source":source or '',
+							"utm_source":source or '',
 							"organization_lead":organization_lead,
 							"company_name":company_name,
 							"notes":notes_html,

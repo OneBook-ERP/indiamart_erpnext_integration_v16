@@ -1,7 +1,8 @@
 {
- "cards_label": "Indiamart  Integration",
+ "cards_label": "Indiamart Integration",
  "category": "Modules",
  "charts": [],
+ "content": "[{\"id\":\"iiheader1\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Indiamart Integration</b></span>\",\"col\":12}},{\"id\":\"iicard1\",\"type\":\"card\",\"data\":{\"card_name\":\"Transaction\",\"col\":4}},{\"id\":\"iicard2\",\"type\":\"card\",\"data\":{\"card_name\":\"Logs\",\"col\":4}},{\"id\":\"iicard3\",\"type\":\"card\",\"data\":{\"card_name\":\"Setup\",\"col\":4}}]",
  "creation": "2022-07-01 11:17:23.025547",
  "developer_mode_only": 0,
  "disable_user_customization": 0,
@@ -13,7 +14,7 @@
  "idx": 0,
  "is_default": 0,
  "is_standard": 1,
- "label": "Indiamart  Integration",
+ "label": "Indiamart Integration",
  "links": [
   {
    "hidden": 0,
@@ -88,9 +89,10 @@
  "modified": "2022-07-01 11:17:23.025547",
  "modified_by": "Administrator",
  "module": "Indiamart Erpnext Integration",
- "name": "Indiamart  Integration",
+ "name": "Indiamart Integration",
  "owner": "Administrator",
  "pin_to_bottom": 0,
  "pin_to_top": 1,
+ "public": 1,
  "shortcuts": []
 }
