@@ -7,6 +7,7 @@
  "field_order": [
   "api_access_detail_section",
   "enabled",
+  "lead_sync_target",
   "last_api_call_time",
   "column_break_2",
   "glusr_mobile",
@@ -17,7 +18,10 @@
   "column_break_5",
   "direct_lead_source",
   "buy_lead_source",
-  "call_lead_source"
+  "call_lead_source",
+  "crm_direct_lead_source",
+  "crm_buy_lead_source",
+  "crm_call_lead_source"
  ],
  "fields": [
   {
@@ -26,6 +30,15 @@
    "fieldname": "enabled",
    "fieldtype": "Check",
    "label": "Enabled"
+  },
+  {
+   "default": "ERPNext CRM",
+   "description": "Which CRM new Indiamart leads are synced into.",
+   "fieldname": "lead_sync_target",
+   "fieldtype": "Select",
+   "label": "Lead Sync Target",
+   "options": "ERPNext CRM\nFrappe CRM",
+   "reqd": 1
   },
   {
    "fieldname": "section_break_4",
@@ -72,36 +85,67 @@
    "fieldtype": "Column Break"
   },
   {
+   "depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
    "description": "QType: W (Direct) ",
    "fieldname": "direct_lead_source",
    "fieldtype": "Link",
    "label": "Direct Lead Source",
-   "options": "UTM Source",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
+   "options": "UTM Source"
   },
   {
+   "depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
    "description": "QType: B  (Consumed Buylead)",
    "fieldname": "buy_lead_source",
    "fieldtype": "Link",
    "label": "Buy Lead Source",
-   "options": "UTM Source",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
+   "options": "UTM Source"
   },
   {
+   "depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
    "description": "QType: P (CALL)",
    "fieldname": "call_lead_source",
    "fieldtype": "Link",
    "label": "CALL Lead Source",
-   "options": "UTM Source",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
+   "options": "UTM Source"
   },
   {
+   "depends_on": "eval:doc.lead_sync_target=='Frappe CRM'",
+   "description": "QType: W (Direct) ",
+   "fieldname": "crm_direct_lead_source",
+   "fieldtype": "Link",
+   "label": "CRM Direct Lead Source",
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='Frappe CRM'",
+   "options": "CRM Lead Source"
+  },
+  {
+   "depends_on": "eval:doc.lead_sync_target=='Frappe CRM'",
+   "description": "QType: B  (Consumed Buylead)",
+   "fieldname": "crm_buy_lead_source",
+   "fieldtype": "Link",
+   "label": "CRM Buy Lead Source",
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='Frappe CRM'",
+   "options": "CRM Lead Source"
+  },
+  {
+   "depends_on": "eval:doc.lead_sync_target=='Frappe CRM'",
+   "description": "QType: P (CALL)",
+   "fieldname": "crm_call_lead_source",
+   "fieldtype": "Link",
+   "label": "CRM CALL Lead Source",
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='Frappe CRM'",
+   "options": "CRM Lead Source"
+  },
+  {
+   "depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
    "description": "When an existing lead is updated, an opportunity gets created based on lead status. \nDefine  default opportunity sales stage for such lead",
    "fieldname": "default_opportunity_sales_stage",
    "fieldtype": "Link",
    "label": "Default Opportunity Sales Stage",
-   "options": "Sales Stage",
-   "reqd": 1
+   "mandatory_depends_on": "eval:doc.lead_sync_target=='ERPNext CRM'",
+   "options": "Sales Stage"
   },
   {
    "fieldname": "api_access_detail_section",
